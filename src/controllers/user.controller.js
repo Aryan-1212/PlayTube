@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js"
 import {User} from "../models/user.model.js"
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import {uploadOnCloudinary, deleteFromCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from 'jsonwebtoken';
 
@@ -226,7 +226,9 @@ const updateAvatar = asyncHandler(async(req, res)=>{
 
     const avatarPath = await uploadOnCloudinary(avatarLocalPath)
 
-    if(!avatarPath.url) throw new ApiError(400, "Error while uploading avatar")
+    if(!avatarPath.url) throw new ApiError(400, "Error while uploading avatar");
+
+    const oldAvatarPath = User.findById(req.user?._id).select("-username -email -fullName -coverImage -password -watchHistory -refreshToken")
 
     const user = User.findByIdAndUpdate(req.user?._id,
         {
@@ -238,6 +240,8 @@ const updateAvatar = asyncHandler(async(req, res)=>{
             new: true
         }
     ).select("-password")
+
+    await deleteFromCloudinary(oldAvatarPath)
 
     return res
     .status(200)
