@@ -231,7 +231,7 @@ const updateAvatar = asyncHandler(async(req, res)=>{
 
     if(!avatarPath.url) throw new ApiError(400, "Error while uploading avatar");
 
-    const oldAvatarPath = User.findById(req.user?._id).select("-username -email -fullName -coverImage -password -watchHistory -refreshToken")
+    const oldAvatarPath = await User.findById(req.user?._id).select("-username -email -fullName -coverImage -password -watchHistory -refreshToken")
 
     const user = User.findByIdAndUpdate(req.user?._id,
         {
@@ -258,8 +258,9 @@ const updateCoverImage = asyncHandler(async(req, res)=>{
         
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
         
-    if(!coverImage) throw new ApiError(400, "Error while uploading image");
+    if(!coverImage.url) throw new ApiError(400, "Error while uploading image");
 
+    const oldCoverImagePath = await User.findById(req.user?._id).select("-username -email -fullName -avatar -password -watchHistory -refreshToken")
 
     const user = User.findByIdAndUpdate(req.user._id,
         {
@@ -271,6 +272,8 @@ const updateCoverImage = asyncHandler(async(req, res)=>{
             new: true
         }
     ).select("-password")
+
+    await deleteFromCloudinary(oldCoverImagePath)
   
     return res
     .status(200)
