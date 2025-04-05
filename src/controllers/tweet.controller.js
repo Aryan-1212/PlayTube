@@ -41,7 +41,7 @@ const updateTweet = (asyncHandler(async (req, res)=>{
 }))
 
 const getUserTweets = (asyncHandler(async (req, res)=>{
-    const userId = req.user?._id
+    const {userId} = req.params
 
     const tweets = await Tweet.aggregate([
         {
@@ -68,14 +68,14 @@ const deleteTweet = (asyncHandler(async (req, res)=>{
 
     if(!tweet) throw new ApiError(404, "Requested tweet not found");
 
-    const deleteVideo = await tweet.deleteOne()
+    const deletedTweet = await tweet.deleteOne()
 
-    if(!deleteTweet) throw new ApiError(500, "Something went wrong while deleting tweet");
+    if(!deletedTweet) throw new ApiError(500, "Something went wrong while deleting tweet");
 
     return res
     .status(200)
-    .json(200, deleteTweet, "Tweet deleted successfully")
+    .json(200, deletedTweet, "Tweet deleted successfully")
 }))
 
 
-export {createTweet}
+export {createTweet, updateTweet, getUserTweets, deleteTweet}
