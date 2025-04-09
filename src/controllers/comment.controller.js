@@ -43,7 +43,7 @@ const deleteComment = asyncHandler(async (res, res)=>{
     
     res
     .status(200)
-    .json(200, deleteComment, "Comment deleted successfully")
+    .json(new ApiResponse(200, deleteComment, "Comment deleted successfully"))
 })
 
 const updateComment = asyncHandler(async (res, res)=>{

@@ -17,7 +17,7 @@ const createTweet = (asyncHandler(async (req, res)=>{
 
     return res
     .status(200)
-    .json(ApiResponse(200, tweet, "Tweet published successfully"))
+    .json(new ApiResponse(200, tweet, "Tweet published successfully"))
 }))
 
 const updateTweet = (asyncHandler(async (req, res)=>{
@@ -37,7 +37,7 @@ const updateTweet = (asyncHandler(async (req, res)=>{
 
     return res
     .status(200)
-    .json(ApiResponse(200, tweet, "Tweet updated successfully"))
+    .json(new ApiResponse(200, tweet, "Tweet updated successfully"))
 }))
 
 const getUserTweets = (asyncHandler(async (req, res)=>{
@@ -55,7 +55,7 @@ const getUserTweets = (asyncHandler(async (req, res)=>{
 
     return res
     .status(200)
-    .json(200, tweets, "Tweets fetched successfully")
+    .json(new ApiResponse(200, tweets, "Tweets fetched successfully"))
 
 }))
 
@@ -74,7 +74,7 @@ const deleteTweet = (asyncHandler(async (req, res)=>{
 
     return res
     .status(200)
-    .json(200, deletedTweet, "Tweet deleted successfully")
+    .json(new ApiResponse(200, deletedTweet, "Tweet deleted successfully"))
 }))
 
 

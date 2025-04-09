@@ -115,7 +115,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .res(new ApiResponse(200, playlist, "Video added to the playlist"));
+    .json(new ApiResponse(200, playlist, "Video added to the playlist"));
 });
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
@@ -138,7 +138,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .res(new ApiResponse(200, playlist, "Video removed from the playlist"));
+    .json(new ApiResponse(200, playlist, "Video removed from the playlist"));
 });
 
 export {

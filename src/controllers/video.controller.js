@@ -136,7 +136,7 @@ const deleteVideo = asyncHandler(async(req, res)=>{
 
     return res
     .status(200)
-    .json(200, deleteVideo, "Video deleted successfully")
+    .json(new ApiResponse(200, deleteVideo, "Video deleted successfully"))
 })
 
 const updateVideo = asyncHandler(async(req, res)=>{
@@ -191,7 +191,7 @@ const togglePublishStatus = asyncHandler(async(req, res)=>{
 
     return res
     .status(200)
-    .json(200, video, "publish status changed successfully")
+    .json(new ApiResponse(200, video, "publish status changed successfully"))
 })
 
 export {publishVideo, getVideoById}

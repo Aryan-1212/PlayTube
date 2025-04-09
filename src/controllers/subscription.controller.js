@@ -37,7 +37,7 @@ const toggleSubscription = asyncHandler(async (req, res)=>{
 
     res
     .status(200)
-    .json(200, toggleSubscribe, "Subscription status changed")
+    .json(new ApiResponse(200, toggleSubscribe, "Subscription status changed"))
 
 
 })

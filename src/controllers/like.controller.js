@@ -35,7 +35,7 @@ const toggleVideoLike = asyncHandler( async (req, res)=>{
     }
 
     res.status(200)
-    .json(200, toggleLike, "Like status changed")  
+    .json(new ApiResponse(200, toggleLike, "Like status changed"))  
 })
 
 const toggleCommentLike = asyncHandler( async (req, res)=>{
@@ -68,7 +68,7 @@ const toggleCommentLike = asyncHandler( async (req, res)=>{
     }
 
     res.status(200)
-    .json(200, toggleLike, "Like status changed")  
+    .json(new ApiResponse(200, toggleLike, "Like status changed")) 
 })
 
 const toggleTweetLike = asyncHandler( async (req, res)=>{
@@ -101,7 +101,7 @@ const toggleTweetLike = asyncHandler( async (req, res)=>{
     }
 
     res.status(200)
-    .json(200, toggleLike, "Like status changed")  
+    .json(new ApiResponse(200, toggleLike, "Like status changed"))
 })
 
 const getLikedVideos = asyncHandler(async (req, res)=>{
