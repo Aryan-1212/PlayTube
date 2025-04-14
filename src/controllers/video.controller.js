@@ -5,7 +5,57 @@ import {ApiResponse} from '../utils/ApiResponse.js'
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// TODO: GET ALL VIDEOS
+
+const getAllVideos = asyncHandler(async(req,res)=>{
+    const {page=1, limit=10, query="", sortBy="createdAt", sortType="desc"} = req.query
+    const sortDirection = sortType==="asc"? 1:-1;
+
+    const skip = parseInt(page - 1) * parseInt(limit)
+
+    const videos = await Video.aggregate([
+        {
+            $match:{
+                title: {
+                    $regex: query,
+                    $options: "i"
+                }
+            }
+        },{
+            $lookup:{
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "user",
+                pipeline:[
+                    {
+                        $project: {
+                            username: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },{
+            $sort:{
+                [sortBy]: sortDirection
+            }
+        },{
+            $facet:{
+                videos: [
+                    {$skip: skip},
+                    {$limit: limit}
+                ]
+            }
+        }
+    ])
+
+    if(!videos) throw new ApiError(500, "Couldn't fetch the videos, try again later");
+    if(videos.length===0) throw new ApiError(404, "No videos found");
+
+    res
+    .status(200)
+    .res(new ApiResponse(200, videos, "Videos fetched successfully"))
+})
 
 const publishVideo = asyncHandler(async(req, res)=>{
     const {title, description} = req.body
@@ -194,4 +244,4 @@ const togglePublishStatus = asyncHandler(async(req, res)=>{
     .json(new ApiResponse(200, video, "publish status changed successfully"))
 })
 
-export {publishVideo, getVideoById, deleteVideo, updateVideo, togglePublishStatus}
+export {publishVideo, getVideoById, deleteVideo, updateVideo, togglePublishStatus, getAllVideos}

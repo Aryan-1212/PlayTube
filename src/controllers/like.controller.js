@@ -112,7 +112,7 @@ const getLikedVideos = asyncHandler(async (req, res)=>{
     const videos = await Like.aggregate([
         {
             $match:{
-                likedBy: mongoose.Types.ObjectId(userId),
+                likedBy: new mongoose.Types.ObjectId(userId),
                 video: {$ne: null} // $ne means not equal, it ensures that video field should not be null
             }
         },{

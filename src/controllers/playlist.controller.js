@@ -25,7 +25,7 @@ const getPlaylistById = asyncHandler(async (req, res) => {
 
   if (!playlistId?.trim()) throw new ApiError(400, "playlistId is missing");
 
-  const playlist = await Playlist.findById(mongoose.Types.ObjectId(playlistId));
+  const playlist = await Playlist.findById(new mongoose.Types.ObjectId(playlistId));
 
   if (!playlist) throw new ApiError(400, "Playlist doesn't exist");
 
@@ -38,7 +38,7 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
   if (!userId?.trim()) throw new ApiError(400, "userId is missing");
 
   const playlists = await Playlist.find({
-    owner: mongoose.Types.ObjectId(userId),
+    owner: new mongoose.Types.ObjectId(userId),
   });
 
   if (!playlists)
@@ -55,7 +55,7 @@ const deletePlaylist = asyncHandler(async (req, res) => {
   if (!playlistId?.trim()) throw new ApiError(400, "PlaylistId is missing");
 
   const deletePlaylist = await Playlist.findByIdAndDelete(
-    mongoose.Types.ObjectId(playlistId)
+    new mongoose.Types.ObjectId(playlistId)
   );
 
   if (!deletePlaylist)
@@ -75,7 +75,7 @@ const updatePlaylist = asyncHandler(async (res, res) => {
   if (!name?.trim()) throw new ApiError(400, "Playlist name should be valid");
 
   const updatePlaylist = await Playlist.findByIdAndUpdate(
-    mongoose.Types.ObjectId(playlistId),
+    new mongoose.Types.ObjectId(playlistId),
     {
       name,
       description,
@@ -101,7 +101,7 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
   if (!videoId?.trim()) throw new ApiError(400, "videoId is missing");
 
   const playlist = await Playlist.findByIdAndUpdate(
-    mongoose.Types.ObjectId(playlistId),
+    new mongoose.Types.ObjectId(playlistId),
     {
       $addToSet: { videos: videoId },
     },
@@ -125,7 +125,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   if (!videoId?.trim()) throw new ApiError(400, "videoId is missing");
 
   const playlist = await Playlist.findByIdAndUpdate(
-    mongoose.Types.ObjectId(playlistId),
+    new mongoose.Types.ObjectId(playlistId),
     {
       $pull: { videos: videoId },
     },

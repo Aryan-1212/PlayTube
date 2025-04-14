@@ -13,7 +13,7 @@ const toggleSubscription = asyncHandler(async (req, res)=>{
     const subscribe = await Subscription.findOne({
         $and:[
             {subscriber:req.user?._id},
-            {channel:mongoose.Types.ObjectId(channelId)}
+            {channel:new mongoose.Types.ObjectId(channelId)}
         ]
     })
 
@@ -23,14 +23,14 @@ const toggleSubscription = asyncHandler(async (req, res)=>{
         await Subscription.deleteOne({
             $and:[
                 {subscriber:req.user?._id},
-                {channel:mongoose.Types.ObjectId(channelId)}
+                {channel:new mongoose.Types.ObjectId(channelId)}
             ]
         })
         toggleSubscribe = {subscribed: false}
     }else{
         await Subscription.create({
             subscriber:req.user?._id,
-            channel: mongoose.Types.ObjectId(channelId)
+            channel: new mongoose.Types.ObjectId(channelId)
         })
         toggleSubscribe = {subscribed: true}
     }
@@ -48,7 +48,7 @@ const getChannelSubscribers = asyncHandler(async (req, res)=>{
     if(!channelId?.trim()) throw new ApiError(400, "channelId is missing");
 
     const subscribers = await Subscription.find({
-        channel: mongoose.Types.ObjectId(channelId)
+        channel: new mongoose.Types.ObjectId(channelId)
     })
 
     if(!subscribers) throw new ApiError(500, "Something went wrong, while fetching subscribers");
@@ -66,7 +66,7 @@ const getSubscribedChannels = asyncHandler(async (req, res)=>{
     if(!subsciberId?.trim()) throw new ApiError(400, "subscriberId is missing");
 
     const channels = await Subscription.find({
-        subscriber: mongoose.Types.ObjectId(subsciberId)
+        subscriber: new mongoose.Types.ObjectId(subsciberId)
     })
 
     if(!channels) throw new ApiError(500, "Something went wrong, while fetching channels you subscribed");

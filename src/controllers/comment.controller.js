@@ -13,8 +13,8 @@ const publishComment = asyncHandler(async (req, res)=>{
 
     const comment = await Comment.create({
         content,
-        video: mongoose.Types.ObjectId(videoId),
-        owner: mongoose.Types.ObjectId(req.user?._id)
+        video: new mongoose.Types.ObjectId(videoId),
+        owner: new mongoose.Types.ObjectId(req.user?._id)
     })
 
     if(!comment) throw new ApiError(500, "unable to upload the comment due to internal server error! Try again later");
@@ -35,7 +35,7 @@ const getAllComments = asyncHandler(async (req, res)=>{
     const commentsQuery = await Comment.aggregate([
         {
             $match:{
-                video: mongoose.Types.ObjectId(videoId)
+                video: new mongoose.Types.ObjectId(videoId)
             }
         },{
             $sort:{
@@ -96,7 +96,7 @@ const deleteComment = asyncHandler(async (res, res)=>{
     if(!commentId?.trim()) throw new ApiError(400, "commentId is missing");
 
     const deleteComment = await Comment.findOneAndDelete({
-        _id: mongoose.Types.ObjectId(commentId)
+        _id: new mongoose.Types.ObjectId(commentId)
     })
 
     if(!deleteComment) throw new ApiError(500, "unable to delete the comment! try again later");
@@ -114,7 +114,7 @@ const updateComment = asyncHandler(async (res, res)=>{
     if(!content?.trim()) throw new ApiError(400, "comment can't be empty");
 
     const updateComment = await Comment.findByIdAndUpdate(
-        mongoose.Types.ObjectId(commentId),{
+        new mongoose.Types.ObjectId(commentId),{
         content
     },{
         new: true,
