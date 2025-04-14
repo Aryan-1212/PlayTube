@@ -25,9 +25,69 @@ const publishComment = asyncHandler(async (req, res)=>{
 })
 
 const getAllComments = asyncHandler(async (req, res)=>{
-    const {vidoeId} = req.params
+    const {videoId} = req.params
     const {page=1, limit=10} = req.query
-    //TODO: Fetch Comments based on page and limits
+
+    if(!videoId?.trim()) throw new ApiError(400, "videoId is missing");
+    
+    const skip = (parseInt(page)-1) * parseInt(limit)
+
+    const commentsQuery = await Comment.aggregate([
+        {
+            $match:{
+                video: mongoose.Types.ObjectId(videoId)
+            }
+        },{
+            $sort:{
+                createdAt:-1
+            }
+        },{
+            $lookup:{
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "user",
+                pipeline: [
+                    {
+                        $project:{
+                            username: 1,
+                            avatar: 1
+                        }
+                    }
+                ]
+            }
+        },{
+            $unwind: "$user"
+        },{
+            $facet:{
+                data:[
+                    {$skip: skip},
+                    {$limit: parseInt(limit)}
+                ],
+                commentsCount:[
+                    {$count: "count"}
+                ]
+            }
+        }
+    ])
+
+    const totalComments = commentsQuery[0]?.commentsCount[0]?.count || 0
+
+    const result = {
+        comments: commentsQuery[0]?.data || [],
+        totalComments,
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalComments/limit)
+    }
+
+    res
+    .status(200)
+    .json(new ApiResponse(
+        200,
+        result,
+        "Comments fetched successfully"
+    ))
+
 })
 
 const deleteComment = asyncHandler(async (res, res)=>{
