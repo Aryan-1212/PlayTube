@@ -4,11 +4,11 @@ import { Like } from './like.model.js'
 
 const tweetSchema = new mongoose.Schema({
     owner:{
-        type: mongoose.schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
     content:{
-        type: string,
+        type: String,
     }
 },{
     timestamps: true

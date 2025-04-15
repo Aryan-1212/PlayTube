@@ -11,7 +11,7 @@ const commentSchema = new mongoose.Schema({
         ref: "Video"
     },
     owner:{
-        type: mongoose.schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
 },{

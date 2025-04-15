@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 const createTweet = (asyncHandler(async (req, res)=>{
     const {content} = req.body
 
+    if(!content?.trim()) throw new ApiError(400, "Tweet can't be empty")
+
     const tweet = await Tweet.create({
         owner: req.user?._id,
         content
@@ -46,7 +48,7 @@ const getUserTweets = (asyncHandler(async (req, res)=>{
     const tweets = await Tweet.aggregate([
         {
             $match: {
-                $owner: new mongoose.Types.ObjectId(userId)
+                owner: new mongoose.Types.ObjectId(userId)
             }
         },
     ])

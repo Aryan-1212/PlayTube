@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { Like } from "../models/like.model";
-import { ApiResponse } from "../utils/ApiResponse";
-import { Comment } from "../models/comment.model";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Like } from "../models/like.model.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { Comment } from "../models/comment.model.js";
 
 const toggleVideoLike = asyncHandler( async (req, res)=>{
     const {videoId} = req.params
@@ -42,13 +42,12 @@ const toggleCommentLike = asyncHandler( async (req, res)=>{
     const {commentId} = req.params
     if(!commentId?.trim()) throw new ApiError(400,"commentId is missing");
 
-    const commentLiked = await Comment.exists({
+    const commentLiked = await Like.findOne({
         $and:[
             {likedBy: req.user?._id},
             {comment: new mongoose.Types.ObjectId(commentId)}
         ]
     })
-
     let toggleLike;
 
     if(commentLiked){
@@ -105,14 +104,11 @@ const toggleTweetLike = asyncHandler( async (req, res)=>{
 })
 
 const getLikedVideos = asyncHandler(async (req, res)=>{
-    const {userId} = res.params
-    
-    if(!userId?.trim()) throw new ApiError(400, "UserId is missing");
 
     const videos = await Like.aggregate([
         {
             $match:{
-                likedBy: new mongoose.Types.ObjectId(userId),
+                likedBy: new mongoose.Types.ObjectId(req.user?._id),
                 video: {$ne: null} // $ne means not equal, it ensures that video field should not be null
             }
         },{

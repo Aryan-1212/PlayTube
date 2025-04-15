@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { Comment } from "../models/comment.model";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiResponse } from "../utils/ApiResponse";
+import { Comment } from "../models/comment.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const publishComment = asyncHandler(async (req, res)=>{
     const {content} = req.body
@@ -90,7 +90,7 @@ const getAllComments = asyncHandler(async (req, res)=>{
 
 })
 
-const deleteComment = asyncHandler(async (res, res)=>{
+const deleteComment = asyncHandler(async (req, res)=>{
     const {commentId} = req.params
 
     if(!commentId?.trim()) throw new ApiError(400, "commentId is missing");
@@ -106,7 +106,7 @@ const deleteComment = asyncHandler(async (res, res)=>{
     .json(new ApiResponse(200, deleteComment, "Comment deleted successfully"))
 })
 
-const updateComment = asyncHandler(async (res, res)=>{
+const updateComment = asyncHandler(async (req, res)=>{
     const {commentId} = req.params
     const {content} = req.body
 

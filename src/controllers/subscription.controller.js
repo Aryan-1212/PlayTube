@@ -1,9 +1,9 @@
 import mongoose, { mongo } from "mongoose";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { Like } from "../models/like.model";
-import { ApiResponse } from "../utils/ApiResponse";
-import { Subscription } from "../models/subscription.model";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { Like } from "../models/like.model.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { Subscription } from "../models/subscription.model.js";
 
 const toggleSubscription = asyncHandler(async (req, res)=>{
     const {channelId} = req.params
@@ -61,12 +61,12 @@ const getChannelSubscribers = asyncHandler(async (req, res)=>{
 })
 
 const getSubscribedChannels = asyncHandler(async (req, res)=>{
-    const {subsciberId} = req.params
+    const {subscriberId} = req.params
 
-    if(!subsciberId?.trim()) throw new ApiError(400, "subscriberId is missing");
+    if(!subscriberId?.trim()) throw new ApiError(400, "subscriberId is missing");
 
     const channels = await Subscription.find({
-        subscriber: new mongoose.Types.ObjectId(subsciberId)
+        subscriber: new mongoose.Types.ObjectId(subscriberId)
     })
 
     if(!channels) throw new ApiError(500, "Something went wrong, while fetching channels you subscribed");
