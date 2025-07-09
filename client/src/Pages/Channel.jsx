@@ -1,11 +1,6 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 
 function Profile() {
-
-  const location = useLocation()
-  const channelList = ['/channel']
-  const isChannel = channelList.includes(location.pathname)
 
   const videos = [
   {
@@ -16,28 +11,28 @@ function Profile() {
     likes: 120,
   },
   {
-    _id: '2',
+    _id: '1',
     title: 'Intro to Node.js',
     thumbnail: 'https://via.placeholder.com/300x180',
     views: 4000,
     likes: 120,
   },
   {
-    _id: '3',
+    _id: '1',
     title: 'Intro to Node.js',
     thumbnail: 'https://via.placeholder.com/300x180',
     views: 4000,
     likes: 120,
   },
   {
-    _id: '4',
+    _id: '1',
     title: 'Intro to Node.js',
     thumbnail: 'https://via.placeholder.com/300x180',
     views: 4000,
     likes: 120,
   },
   {
-    _id: '5',
+    _id: '1',
     title: 'Intro to Node.js',
     thumbnail: 'https://via.placeholder.com/300x180',
     views: 4000,
@@ -78,9 +73,7 @@ function Profile() {
               <p className='text-gray-400'>2 Videos</p>
             </div>
             <button className='py-1 w-52 rounded-sm cursor-pointer bg-[#222227] hover:bg-[#2a2a31] duration-500'>
-              {
-                isChannel? "Subscribe": "Customize"
-              }
+              Subscribe
             </button>
           </div>
         </div>

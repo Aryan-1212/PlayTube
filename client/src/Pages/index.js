@@ -13,5 +13,7 @@ import Playlists from "./Playlists";
 import Subscriptions from "./Subscriptions";
 import WatchLater from "./WatchLater";
 import Profile from "./Profile";
+import Video from "./Video";
+import Channel from './Channel'
 
-export {Home, Header, Footer, About, Contact, Login, Register, Dashboard, HeaderLeft, History, LikedVideos, Playlists, Subscriptions, WatchLater, Profile}
+export {Home, Header, Footer, About, Contact, Login, Register, Dashboard, HeaderLeft, History, LikedVideos, Playlists, Subscriptions, WatchLater, Profile, Video, Channel}

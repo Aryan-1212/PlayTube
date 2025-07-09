@@ -74,6 +74,33 @@ function HeaderLeft() {
           </li>
         </NavLink>
       </div>
+      <hr className="my-4" />
+      <div className="flex flex-col list-none">
+        <NavLink to="/channel" className="flex p-2 rounded-md cursor-pointer hover:bg-[#2a2a31] space-x-2">
+          <div className="w-9 text-2xl flex justify-center items-center">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=160&h=90&fit=crop" className="h-9 rounded-3xl" alt="avatar" />
+          </div>
+          <li className="flex justify-center items-center">
+            Subscription
+          </li>
+        </NavLink>
+        <NavLink to="/channel" className="flex p-2 rounded-md cursor-pointer hover:bg-[#2a2a31] space-x-2">
+          <div className="w-9 text-2xl flex justify-center items-center">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=160&h=90&fit=crop" className="h-9 rounded-3xl" alt="avatar" />
+          </div>
+          <li className="flex justify-center items-center">
+            Subscription
+          </li>
+        </NavLink>
+        <NavLink to="/channel" className="flex p-2 rounded-md cursor-pointer hover:bg-[#2a2a31] space-x-2">
+          <div className="w-9 text-2xl flex justify-center items-center">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=160&h=90&fit=crop" className="h-9 rounded-3xl" alt="avatar" />
+          </div>
+          <li className="flex justify-center items-center">
+            Subscription
+          </li>
+        </NavLink>
+      </div>
     </>
   );
 }

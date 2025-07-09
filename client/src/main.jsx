@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import Layout from './Layout.jsx'
-import {Home, About, Contact, Login, Subscriptions, History, Playlists, Dashboard, WatchLater, LikedVideos, Register, Profile} from './Pages'
+import {Home, About, Contact, Login, Subscriptions, History, Playlists, Dashboard, WatchLater, LikedVideos, Register, Profile, Video, Channel} from './Pages'
 
 
 const router = createBrowserRouter([
@@ -51,6 +51,13 @@ const router = createBrowserRouter([
         path: '/profile',
         element: <Profile />
       },
+      {
+        path: '/watch',
+        element: <Video />
+      },{
+        path: '/channel',
+        element: <Profile />
+      }
     ]
   }
 
