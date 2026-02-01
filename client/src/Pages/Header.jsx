@@ -6,8 +6,18 @@ import { IoPersonOutline } from "react-icons/io5";
 import { VscColorMode } from "react-icons/vsc";
 import { GrLanguage } from "react-icons/gr";
 import { GoSignOut } from "react-icons/go";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../store/AuthSlice";
 
 function Header() {
+
+  const handleSignOut = ()=>{
+    console.log(11)
+    dispatch(logoutUser())
+  }
+
+  const dispatch = useDispatch()
+
   return (
     <div className="bg-[#1c1c21] text-white w-full h-14 flex justify-between px-10 items-center relative">
       {/* Logo */}
@@ -66,11 +76,12 @@ function Header() {
           </NavLink>
           <NavLink
             className="py-2 text-center rounded-br-md rounded-bl-md hover:bg-[#4a4a52] cursor-pointer px-4 flex content-center space-x-3"
+            onClick={handleSignOut}
           >
             <div className="flex items-center">
               <GoSignOut />
             </div>
-            <div>Sign out</div>
+            <button type="button" className="cursor-pointer">Sign out</button>
           </NavLink>
         </div>
       </div>

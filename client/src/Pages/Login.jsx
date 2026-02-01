@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, getUser } from '../store/AuthSlice';
+import { Navigate } from 'react-router-dom';
+import Loading from '../Components/Loading';
+import { toast } from 'react-toastify';
 
 function Login() {
+
+  const dispatch = useDispatch();
+
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+
+  const userData = useSelector(getUser);
+
+  const handleSubmit = () =>{
+    dispatch(loginUser({email: user, username:user, password}))
+  }
+
+  useEffect(()=>{
+    if(userData.error) toast.error(userData.error)
+  },userData.error)
+
+
+  if (userData && userData.isAuthenticated) return <Navigate to="/" />
+
   return (
+    <>
+    {userData?.loading && <Loading />}
     <div className="bg-[#1c1c21] w-screen h-screen flex justify-center items-center">
       <div className="w-full max-w-md bg-[#26262c] rounded-2xl shadow-lg p-10 flex flex-col items-center space-y-10">
   
@@ -12,26 +39,36 @@ function Login() {
 
         <div className="w-full flex flex-col space-y-6">
           <input
-            type="email"
-            placeholder="Email"
+            type="text"
+            name='user'
+            value={user}
+            onChange={e=>setUser(e.target.value)}
+            placeholder="Enter email or username"
             className="w-full p-3 rounded-md bg-[#1f1f25] text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
           />
           <input
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
             className="w-full p-3 rounded-md bg-[#1f1f25] text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
           />
         </div>
-
         <div className="w-full flex flex-col items-center space-y-4">
-          <button className="w-full bg-blue-500 cursor-pointer hover:bg-blue-600 text-white font-medium py-3 rounded-md transition duration-300">
-            Log In
+          
+
+          <button className={`w-full ${userData.loading? "bg-gray-600" : "bg-blue-500 hover:bg-blue-600"}  cursor-pointer  text-white font-medium py-3 rounded-md transition duration-300`} onClick={handleSubmit} disabled={userData.loading}>
+
+            {
+            userData.loading ? "getting you in":"Login"
+            }
           </button>
           <Link className="text-sm text-gray-400 hover:text-gray-200 cursor-pointer transition">Forgot Password?</Link>
           <Link to="/register" className="text-sm text-gray-400 hover:text-gray-200 cursor-pointer transition">Create a New Account</Link>
         </div>
       </div>
     </div>
+    </>
   );
 }
 

@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { VideoCard } from '../Components'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchHomeVideos, getVideos } from '../store/VideosSlice'
 
 function Home() {
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(fetchHomeVideos())
+  },[dispatch])
+
+  const videos = useSelector(getVideos)
+
+  console.log(videos)
 
   const videoProps = {
     thumbnail: "",

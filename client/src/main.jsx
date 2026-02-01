@@ -1,14 +1,21 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import Layout from './Layout.jsx'
 import {Home, About, Contact, Login, Subscriptions, History, Playlists, Dashboard, WatchLater, LikedVideos, Register, Profile, Video, Channel} from './Pages'
-
+import { Provider } from 'react-redux'
+import store from './store/store.js'
+import RootLayout from './RootLayout.jsx'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
+    path: "",
+    element: <RootLayout />,
+    children: [
+      {
     path: '/register',
     element: <Register />,
   },
@@ -60,12 +67,16 @@ const router = createBrowserRouter([
       }
     ]
   }
-
+    ]
+  }
 ])
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </Provider>
   </StrictMode>,
 )

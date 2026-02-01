@@ -50,11 +50,12 @@ const getAllVideos = asyncHandler(async(req,res)=>{
     ])
 
     if(!videos) throw new ApiError(500, "Couldn't fetch the videos, try again later");
-    if(videos.length===0) throw new ApiError(404, "No videos found");
+    if(videos[0]?.videos.length===0) throw new ApiError(404, "No videos found");
+
 
     res
     .status(200)
-    .res(new ApiResponse(200, videos, "Videos fetched successfully"))
+    .json(new ApiResponse(200, videos[0].videos, "Videos fetched successfully"))
 })
 
 const publishVideo = asyncHandler(async(req, res)=>{

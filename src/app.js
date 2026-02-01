@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import errorHandler from './middlewares/error.middleware.js';
 
 const app = express()
 
@@ -35,5 +36,8 @@ app.use("/api/v1/subscription",subscriptionRouter)
 app.use("/api/v1/playlist",playlistRouter)
 app.use("/api/v1/healthcheck",healthcheckRouter)
 app.use("/api/v1/dashboard",dashboardRouter)
+
+// To send a proper error response, we are structuring it here:
+app.use(errorHandler)
 
 export default app
