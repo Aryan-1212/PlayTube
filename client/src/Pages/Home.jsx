@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { VideoCard } from '../Components'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchHomeVideos, getVideos } from '../store/VideosSlice'
+import Loading from '../Components/Loading';
 
 function Home() {
   const dispatch = useDispatch();
@@ -12,30 +13,21 @@ function Home() {
 
   const videos = useSelector(getVideos)
 
-  console.log(videos)
-
-  const videoProps = {
-    thumbnail: "",
-    title: "Test",
-    ownerName: "Aryan",
-    OwnerAvatar: "",
-    views: '12k',
-    uploadedAt: "2 days ago"
-  }
+  const feedVideos = videos.videos
 
   return (
+    <>
+    {videos?.loading && <Loading />}
     <div className=''>
-      <div className='flex'>
-        <VideoCard video={videoProps} />
-        <VideoCard video={videoProps} />
-        <VideoCard video={videoProps} />
-      </div>
-      <div className='flex'>
-        <VideoCard video={videoProps} />
-        <VideoCard video={videoProps} />
-        <VideoCard video={videoProps} />
+      <div className='flex flex-wrap space-x-4'>
+        {
+          feedVideos.map((video)=>
+            <VideoCard key={video._id} video={video} />
+          )
+        }
       </div>
     </div>
+    </>
   )
 }
 

@@ -25,15 +25,17 @@ const generateAccessAndRefreshTokens = async(userId) =>{
 }
 
 const registerUser = asyncHandler(async (req, res)=>{
-    const {email, fullname, password} = req.body;
+    const {email, username, password} = req.body;
 
-    if([email, fullname, password].some((field)=>
+    if([email, username, password].some((field)=>
         !field || field?.trim() === ""
     )){
         throw new ApiError(400, "All fields are required.")
     }
     
-    const existedUser = await User.findOne({email})
+    const existedUser = await User.findOne({
+        $or:[{email}, {username}]
+    })
     
 
     if(existedUser) throw new ApiError(409, "Username or Email already exists!");
@@ -61,7 +63,7 @@ const registerUser = asyncHandler(async (req, res)=>{
     // if(!avatarCloudinaryPath) throw new ApiError(400, "Avatart is required");
     
     const user = await User.create({
-        fullname,
+        username,
         // avatar: avatarCloudinaryPath.url,
         // coverImage: coverImageCloudinaryPath?.url || "",
         email,
@@ -219,7 +221,6 @@ const updateAccountDetails = asyncHandler(async(req, res)=>{
 })
 
 const updateAvatar = asyncHandler(async(req, res)=>{
-
     const avatarLocalPath = req.file?.path
 
     if(!avatarLocalPath) throw new ApiError(400, "Avatar is required");
@@ -227,13 +228,13 @@ const updateAvatar = asyncHandler(async(req, res)=>{
     const avatarPath = await uploadOnCloudinary(avatarLocalPath)
 
     if(!avatarPath.url) throw new ApiError(400, "Error while uploading avatar");
-
     const oldAvatarPath = await User.findById(req.user?._id).select("-username -email -fullName -coverImage -password -watchHistory -refreshToken")
 
-    const user = User.findByIdAndUpdate(req.user?._id,
+    const user = await User.findByIdAndUpdate(req.user?._id,
         {
             $set: {
-                avatar: avatarPath.url
+                avatar: avatarPath.url,
+                avatarPublicId: avatarPath.public_id
             }
         },
         {
@@ -241,7 +242,8 @@ const updateAvatar = asyncHandler(async(req, res)=>{
         }
     ).select("-password")
 
-    await deleteFromCloudinary(oldAvatarPath)
+    console.log(oldAvatarPath)
+    await deleteFromCloudinary(oldAvatarPath.avatarPublicId)
 
     return res
     .status(200)

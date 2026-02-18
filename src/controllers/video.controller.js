@@ -128,6 +128,14 @@ const getVideoById = asyncHandler(async(req,res)=>{
             },
         },
         {
+            $lookup:{
+                from: "likes",
+                localField: "_id",
+                foreignField: "video",
+                as: "likes",
+            }
+        },
+        {
             $addFields:{
                 "owner.subscriberCount": {
                     $size: "$subscribers"
@@ -140,6 +148,18 @@ const getVideoById = asyncHandler(async(req,res)=>{
                         then: true,
                         else: false
                     }
+                },
+                likesCount: {
+                    $size: "$likes",
+                },
+                isLiked: {
+                    $cond:{
+                        if:{
+                            $in: [req.user?._id, "$likes.likedBy"],
+                        },
+                        then: true,
+                        else: false,
+                    }
                 }
             },
         },{
@@ -151,6 +171,10 @@ const getVideoById = asyncHandler(async(req,res)=>{
                 description:1,
                 views: 1,
                 isPublished: 1,
+                createdAt: 1,
+                likesCount: 1,
+                isLiked: 1,
+                "owner._id": 1,
                 "owner.username": 1,
                 "owner.avatar": 1,
                 "owner.subscriberCount": 1,
@@ -159,12 +183,11 @@ const getVideoById = asyncHandler(async(req,res)=>{
         }
     ])
 
-    if(!video) throw new ApiError(404, "No video found");
+    if(!video.length) throw new ApiError(404, "No video found");
 
     return res
     .status(200)
     .json(new ApiResponse(200, video[0], "Video fetched successfully"))
-
 })
 
 const deleteVideo = asyncHandler(async(req, res)=>{

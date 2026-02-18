@@ -9,13 +9,11 @@ const toggleVideoLike = asyncHandler( async (req, res)=>{
     const {videoId} = req.params
     if(!videoId?.trim()) throw new ApiError(400,"VideoId is missing");
 
-    const videoLiked = await Like.findOne({
-        $and:[
-            {likedBy: req.user?._id},
-            {video: new mongoose.Types.ObjectId(videoId)}
-        ]
+    const videoLiked = await Like.findOne({ 
+        likedBy: req.user?._id,
+        video: videoId
     })
-
+    
     let toggleLike;
 
     if(videoLiked){

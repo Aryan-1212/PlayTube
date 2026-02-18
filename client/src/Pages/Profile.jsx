@@ -1,73 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { getUser } from '../store/AuthSlice';
+import { TbUserEdit } from "react-icons/tb";
+import { FiEdit } from "react-icons/fi";
+import EditImageModal from '../Components/EditImageModal';
+import { getProfile } from '../store/UserSlice';
 
 function Profile() {
+
+  const userProfile = useSelector(getProfile)
+  console.log(userProfile)
+  
 
   const location = useLocation()
   const channelList = ['/channel']
   const isChannel = channelList.includes(location.pathname)
+  const user = useSelector(getUser)?.user
 
-  const videos = [
-  {
-    _id: '1',
-    title: 'Intro to Node.js',
-    thumbnail: 'https://via.placeholder.com/300x180',
-    views: 4000,
-    likes: 120,
-  },
-  {
-    _id: '2',
-    title: 'Intro to Node.js',
-    thumbnail: 'https://via.placeholder.com/300x180',
-    views: 4000,
-    likes: 120,
-  },
-  {
-    _id: '3',
-    title: 'Intro to Node.js',
-    thumbnail: 'https://via.placeholder.com/300x180',
-    views: 4000,
-    likes: 120,
-  },
-  {
-    _id: '4',
-    title: 'Intro to Node.js',
-    thumbnail: 'https://via.placeholder.com/300x180',
-    views: 4000,
-    likes: 120,
-  },
-  {
-    _id: '5',
-    title: 'Intro to Node.js',
-    thumbnail: 'https://via.placeholder.com/300x180',
-    views: 4000,
-    likes: 120,
-  },
-];
-
+  const [editCoverImage, setEditCoverImage] = useState(false);
+  const [editAvatar, setEditAvatar] = useState(false);
+  const [editType, setEditType] = useState(null); // null, avatar, coverimage
 
   return (
     <div>
-      <div className='flex flex-col mx-28'>
-        <div className='w-full rounded-2xl overflow-hidden h-48'>
+      {editType && <EditImageModal type={editType} close={()=>setEditType(null)} />}
+      <div className='flex flex-col mx-28 h-full'>
+        <div className='w-full h-60 relative rounded-2xl group cursor-pointer' onClick={()=>setEditType('coverImage')}>
           <img
             src="https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630"
             alt="coverImage"
-            className='w-full h-full object-cover'
+            className='w-full h-full object-cover rounded-2xl'
           />
+          <div className='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl'>
+          <div className='flex items-center gap-2 text-white text-xl font-medium'>
+            <FiEdit />
+            <span>Edit</span>
+          </div>
+          </div>
+            
         </div>
 
-        <div className='w-5/6 h-48 flex'>
-          <div className='w-1/5 flex justify-center items-center'>
-            <div className='w-4/5 h-3/4 rounded-full overflow-hidden'>
+        <div className='w-full h-80 flex items-center space-x-10'>
+          <div className='w-72 h-72 flex'>
+            <div className='relative rounded-full cursor-pointer' onClick={()=>setEditType('avatar')}>
               <img
                 src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
-                className='w-full h-full object-cover'
+                className='w-full h-full object-cover rounded-full'
                 alt="avatar"
               />
+              <div className='absolute inset-0 opacity-0 hover:opacity-100 flex items-center justify-center bg-black/50 rounded-full'>
+                <div className='flex items-center justify-center text-xl gap-2'>
+                <TbUserEdit />
+                <span>Edit</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className='flex flex-col justify-center pl-4 space-y-2'>
+          <div className='flex flex-col justify-center pl-4 space-y-6'>
             <h2 className='text-5xl font-semibold'>Channel Name</h2>
             <h2 className='text-2xl font-semibold'>Username</h2>
             <div className='flex'>
@@ -86,29 +76,6 @@ function Profile() {
         </div>
       </div>
 
-      <div className='h-[1px] w-full bg-gray-600'></div>
-
-      <div className='mx-28 mt-6'>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {videos.map((video) => (
-            <div
-              key={video._id}
-              className="bg-[#2a2a2f] rounded-xl overflow-hidden shadow-md"
-            >
-              <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="h-40 w-full object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold truncate">{video.title}</h3>
-                <p className="text-sm text-gray-400 mt-1">{video.views} views</p>
-                <p className="text-sm text-gray-400 mt-1">{video.likes} likes</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
       </div>
   );
 }

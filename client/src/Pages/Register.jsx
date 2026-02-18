@@ -11,7 +11,7 @@ function Register() {
   const userData = useSelector(getUser);
   const dispatch = useDispatch();
   
-  const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [togglePassword, setTogglePassword] = useState(false);
@@ -28,7 +28,7 @@ function Register() {
       return;
     }
     
-    dispatch(registerUser({fullname, email, password}))
+    dispatch(registerUser({username, email, password}))
   }
   
   useEffect(()=>{
@@ -54,8 +54,8 @@ function Register() {
         <div className="w-full flex flex-col space-y-6">
           <input
             type="text"
-            value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             placeholder="Full Name"
             className="w-full p-3 rounded-md bg-[#1f1f25] text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
           />

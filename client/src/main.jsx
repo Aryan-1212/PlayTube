@@ -59,7 +59,7 @@ const router = createBrowserRouter([
         element: <Profile />
       },
       {
-        path: '/watch',
+        path: '/watch/:videoId',
         element: <Video />
       },{
         path: '/channel',

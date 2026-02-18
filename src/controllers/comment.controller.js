@@ -10,7 +10,6 @@ const publishComment = asyncHandler(async (req, res)=>{
 
     if(!content?.trim()) throw new ApiError(400, "comment can't be empty");
     if(!videoId?.trim()) throw new ApiError(400, "VideoId is missing");
-
     const comment = await Comment.create({
         content,
         video: new mongoose.Types.ObjectId(videoId),
@@ -29,9 +28,9 @@ const getAllComments = asyncHandler(async (req, res)=>{
     const {page=1, limit=10} = req.query
 
     if(!videoId?.trim()) throw new ApiError(400, "videoId is missing");
-    
+        
     const skip = (parseInt(page)-1) * parseInt(limit)
-
+    
     const commentsQuery = await Comment.aggregate([
         {
             $match:{
@@ -70,16 +69,16 @@ const getAllComments = asyncHandler(async (req, res)=>{
             }
         }
     ])
-
+    
     const totalComments = commentsQuery[0]?.commentsCount[0]?.count || 0
-
+    
     const result = {
         comments: commentsQuery[0]?.data || [],
         totalComments,
         currentPage: parseInt(page),
         totalPages: Math.ceil(totalComments/limit)
     }
-
+    
     res
     .status(200)
     .json(new ApiResponse(

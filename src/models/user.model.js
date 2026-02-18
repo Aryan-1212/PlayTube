@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { type } from "os";
 
 const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      // required: true,
+      required: true,
       unique: true,
       lowercase: true,
       trim: true,
@@ -21,14 +22,20 @@ const userSchema = new mongoose.Schema(
     },
     fullname: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
       index: true,
     },
     avatar: {
       type: String,
     },
+    avatarPublicId:{
+      type: String,
+    },
     coverImage: {
+      type: String,
+    },
+    coverImagePublicId:{
       type: String,
     },
     password: {
